@@ -85,7 +85,7 @@ class FinderController extends Controller
                 'id'    => $category,
                 'name'  => $c->details[0]->name,
                 'items' => $i->total,
-                'test'  => $this->test->getGroup(3)
+                'test'  => $this->test->getGroup(3),
             ];
         }
 
@@ -101,7 +101,7 @@ class FinderController extends Controller
     public function show( $category, $group )
     {
 
-        return $category;
+        return $this->categories;
 
     }
 

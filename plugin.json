@@ -9,6 +9,9 @@
     "author": "Sebastian Rasch",
     "authorIcon": "",
     "pluginIcon": "",
+    "require": [
+        "IO"
+    ],
     "price": 0.00,
     "namespace": "Finder",
     "type": "template",

@@ -2,7 +2,6 @@
 
 namespace Finder\Providers;
 
-use Finder\Controllers\FinderController;
 use Plenty\Plugin\RouteServiceProvider;
 use Plenty\Plugin\Routing\ApiRouter;
 

@@ -27,7 +27,13 @@ class FinderController extends Controller
      */
     protected $config;
 
+    /**
+     * @var array
+     */
+    private $categories;
+
     protected $lang;
+
 
     /**
      * FinderController constructor.
@@ -36,23 +42,37 @@ class FinderController extends Controller
      */
     public function __construct( ConfigRepository $configRepository )
     {
+
         $this->config = $configRepository;
+
+        $this->categories = explode(',', $this->config->get('finder.category_ids'));
     }
 
 
     /**
      * @param \Plenty\Plugin\Http\Request $request
-     * @return \Plenty\Modules\Category\Models\Category
+     * @return array
      */
-    public function index( Request $request ) : Category
+    public function index( Request $request ) : array
     {
-
+        /** @var CategoryService $categoryService */
         $categoryService = pluginApp(CategoryService::class);
+
+        $categories = [];
+
+        foreach ( $this->categories as $category ) {
+
+            $c = $categoryService->get($category);
+            $categories[] = [
+                'id'   => $category,
+                'name' => $c->details[0]->name
+            ];
+        }
 
         $this->getLogger('FinderController_index')
             ->info('Call rest route successful');
 
-        return $categoryService->get(561);
+        return $categories;
     }
 
 

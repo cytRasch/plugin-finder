@@ -4,6 +4,7 @@ namespace Finder\Controllers;
 
 
 use IO\Services\CategoryService;
+use Plenty\Modules\Category\Models\Category;
 use Plenty\Plugin\ConfigRepository;
 use Plenty\Plugin\Controller;
 use Plenty\Plugin\Http\Request;
@@ -41,9 +42,9 @@ class FinderController extends Controller
 
     /**
      * @param \Plenty\Plugin\Http\Request $request
-     * @return array
+     * @return \Plenty\Modules\Category\Models\Category
      */
-    public function index( Request $request ) : array
+    public function index( Request $request ) : Category
     {
 
         $categoryService = pluginApp(CategoryService::class);

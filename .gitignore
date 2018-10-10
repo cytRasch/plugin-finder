@@ -1,0 +1,13 @@
+# files
+package.json
+webpack.mix.js
+yarn.lock
+.DS_Store
+mix-manifest.json
+dump.php
+
+# directories
+node_modules/
+tests/
+.idea/
+resources/assets/

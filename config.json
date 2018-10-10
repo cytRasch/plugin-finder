@@ -1,0 +1,19 @@
+{
+    "formatVersion": 1,
+    "menu": {
+        "Config.SettingsTab": {
+            "label": "Config.settingsTab",
+            "formFields": {
+                "finder.category_ids": {
+                    "type": "inputText",
+                    "required": false,
+                    "label": "Config.finderCategoryIds",
+                    "options": {
+                        "tooltip": "Config.finderCategoryIdsToolTip",
+                        "defaultValue": ""
+                    }
+                }
+            }
+        }
+    }
+}

@@ -45,7 +45,7 @@ class FinderController extends Controller
 
         $this->config = $configRepository;
 
-        $this->categories = explode(',', $this->config->get('finder.category_ids'));
+        $this->categories = explode(',', $this->config->get('Finder.finder.category_ids'));
     }
 
 

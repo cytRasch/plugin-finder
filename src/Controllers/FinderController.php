@@ -5,12 +5,10 @@ namespace Finder\Controllers;
 
 use IO\Services\CategoryService;
 use IO\Services\ItemService;
-use Plenty\Modules\Category\Models\Category;
-use Plenty\Modules\Category\Models\CategoryItemCount;
+use Plenty\Modules\Property\Contracts\PropertyGroupRepositoryContract;
 use Plenty\Plugin\ConfigRepository;
 use Plenty\Plugin\Controller;
 use Plenty\Plugin\Http\Request;
-use Plenty\Plugin\Log\Loggable;
 
 
 /**
@@ -22,7 +20,6 @@ use Plenty\Plugin\Log\Loggable;
 class FinderController extends Controller
 {
 
-    use Loggable;
 
     /**
      * @var \Plenty\Plugin\ConfigRepository
@@ -34,20 +31,34 @@ class FinderController extends Controller
      */
     private $categories;
 
-    protected $lang;
+    /**
+     * @var array
+     */
+    private $propertyGroups;
+
+    /**
+     * @var \Plenty\Modules\Property\Contracts\PropertyGroupRepositoryContract
+     */
+    public $test;
 
 
     /**
      * FinderController constructor.
      *
-     * @param \Plenty\Plugin\ConfigRepository $configRepository
+     * @param \Plenty\Plugin\ConfigRepository                                    $configRepository
+     * @param \Plenty\Modules\Property\Contracts\PropertyGroupRepositoryContract $propertyGroupRepositoryContract
      */
-    public function __construct( ConfigRepository $configRepository )
+    public function __construct( ConfigRepository $configRepository, PropertyGroupRepositoryContract $propertyGroupRepositoryContract )
     {
 
         $this->config = $configRepository;
 
-        $this->categories = explode(',', $this->config->get('Finder.finder.category_ids'));
+        $values = explode(';', $this->config->get('Finder.finder.category_ids'));
+
+        $this->categories = $values[0];
+        $this->propertyGroups = explode(',', $values[1]);
+
+        $this->test = $propertyGroupRepositoryContract;
 
     }
 
@@ -68,15 +79,15 @@ class FinderController extends Controller
         foreach ( $this->categories as $category ) {
 
             $c = $categoryService->get($category);
+            $i = $itemService->getItemForCategory($category, [], 1);
+
             $categories[] = [
-                'id'   => $category,
-                'name' => $c->details[0]->name,
-                'test' => $itemService->getItemForCategory(561, [], 1),
+                'id'    => $category,
+                'name'  => $c->details[0]->name,
+                'items' => $i->total,
+                'test'  => $this->test->getGroup(3)
             ];
         }
-
-        $this->getLogger('FinderController_index')
-            ->info('Call rest route successful');
 
         return $categories;
     }

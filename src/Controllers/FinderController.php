@@ -3,6 +3,7 @@
 namespace Finder\Controllers;
 
 
+use IO\Services\CategoryService;
 use Plenty\Plugin\ConfigRepository;
 use Plenty\Plugin\Controller;
 use Plenty\Plugin\Http\Request;
@@ -25,6 +26,7 @@ class FinderController extends Controller
      */
     protected $config;
 
+    protected $lang;
 
     /**
      * FinderController constructor.
@@ -33,7 +35,6 @@ class FinderController extends Controller
      */
     public function __construct( ConfigRepository $configRepository )
     {
-
         $this->config = $configRepository;
     }
 
@@ -45,12 +46,12 @@ class FinderController extends Controller
     public function index( Request $request ) : array
     {
 
+        $categoryService = pluginApp(CategoryService::class);
+
         $this->getLogger('FinderController_index')
             ->info('Call rest route successful');
 
-        return [
-            'test' => 'test'
-        ];
+        return $categoryService->get(561);
     }
 
 

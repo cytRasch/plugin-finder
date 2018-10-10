@@ -1,35 +1,8 @@
 {
     "version": "1.0.0",
     "name": "Finder",
-    "marketplaceName": {
-        "de": "Finder/Konfi für Webshops",
-        "en": "Finder/Configurator for wenshops"
-    },
-    "description": "",
-    "author": "Sebastian Rasch",
-    "license": "Copyright by createyourtemplate GmbH & Co.KG",
-    "isClosedSource": true,
-    "pluginIcon": "",
-    "price": 0.00,
-    "shortDescription": {
-        "de": "Erstellen Sie sich ihren eigenen Finder/Konfigurator mit Kategories & Facetten für blitzschnelle Ergebnisse",
-        "en": "Create your own finder/configurator for lightning fast results. "
-    },
-    "authorIcon": "icon_cyt_xs.png",
-    "email": "office@cyt.de",
-    "phone": "",
-    "categories": [
-        "3527"
-    ],
-    "keywords": [],
-    "type": "template",
-    "require": [
-        "IO",
-        "Ceres"
-    ],
+    "description": "A Finder",
     "namespace": "Finder",
-    "serviceProvider": "Finder\\Providers\\FinderServiceProvider",
-    "javaScriptFiles": [],
-    "runOnBuild": [],
-    "dataProviders": []
+    "type": "template",
+    "serviceProvider": "Finder\\Providers\\FinderServiceProvider"
 }

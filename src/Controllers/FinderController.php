@@ -42,7 +42,9 @@ class FinderController extends Controller
     public function index( Request $request ) : array
     {
 
-        return $request->all();
+        return [
+            'test' => 'test'
+        ];
     }
 
 

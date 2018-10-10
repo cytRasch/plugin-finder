@@ -4,7 +4,9 @@ namespace Finder\Controllers;
 
 
 use IO\Services\CategoryService;
+use IO\Services\ItemService;
 use Plenty\Modules\Category\Models\Category;
+use Plenty\Modules\Category\Models\CategoryItemCount;
 use Plenty\Plugin\ConfigRepository;
 use Plenty\Plugin\Controller;
 use Plenty\Plugin\Http\Request;
@@ -46,6 +48,7 @@ class FinderController extends Controller
         $this->config = $configRepository;
 
         $this->categories = explode(',', $this->config->get('Finder.finder.category_ids'));
+
     }
 
 
@@ -55,8 +58,10 @@ class FinderController extends Controller
      */
     public function index( Request $request ) : array
     {
+
         /** @var CategoryService $categoryService */
         $categoryService = pluginApp(CategoryService::class);
+        $itemService = pluginApp(ItemService::class);
 
         $categories = [];
 
@@ -65,7 +70,8 @@ class FinderController extends Controller
             $c = $categoryService->get($category);
             $categories[] = [
                 'id'   => $category,
-                'name' => $c->details[0]->name
+                'name' => $c->details[0]->name,
+                'test' => $itemService->getItemForCategory(561, [], 1),
             ];
         }
 

@@ -3,6 +3,7 @@
 namespace Finder\Controllers;
 
 use Plenty\Plugin\Controller;
+use Plenty\Plugin\Http\Request;
 
 
 /**
@@ -13,12 +14,14 @@ use Plenty\Plugin\Controller;
  */
 class FinderController extends Controller {
 
-    public function index() {
+    public function index(Request $request) {
 
-        return 'test';
+        return $request->all();
     }
 
-    public function show() {
+    public function show($category, $group) {
+
+        return $category;
 
     }
 

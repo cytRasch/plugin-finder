@@ -6,6 +6,7 @@ namespace Finder\Controllers;
 use Plenty\Plugin\ConfigRepository;
 use Plenty\Plugin\Controller;
 use Plenty\Plugin\Http\Request;
+use Plenty\Plugin\Log\Loggable;
 
 
 /**
@@ -16,6 +17,8 @@ use Plenty\Plugin\Http\Request;
  */
 class FinderController extends Controller
 {
+
+    use Loggable;
 
     /**
      * @var \Plenty\Plugin\ConfigRepository
@@ -41,6 +44,9 @@ class FinderController extends Controller
      */
     public function index( Request $request ) : array
     {
+
+        $this->getLogger('FinderController_index')
+            ->info('Call rest route successful');
 
         return [
             'test' => 'test'

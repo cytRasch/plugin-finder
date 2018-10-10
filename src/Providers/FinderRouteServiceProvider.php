@@ -31,7 +31,7 @@ class FinderRouteServiceProvider extends RouteServiceProvider
     public function map( ApiRouter $apiRouter )
     {
 
-        $apiRouter->version(['v1'], ['namespace' => 'Finder\Controllers'], function ( $router )
+        $apiRouter->version(['v1'], [], function ( $router )
         {
             $router->get('finder', 'Finder\Controllers\FinderController@index');
             $router->get('finder/{category}', 'Finder\Controllers\FinderController@show');

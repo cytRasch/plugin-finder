@@ -17,7 +17,7 @@ class FinderRouteServiceProvider extends RouteServiceProvider {
 
         $apiRouter->version(['v1'], [], function ($router) {
 
-            $router->resource('finder', FinderController::class);
+            $router->get('finder', 'Finder\Controllers\FinderController@index');
 
         });
 

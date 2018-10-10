@@ -55,7 +55,7 @@ class FinderController extends Controller
 
         $values = explode(';', $this->config->get('Finder.finder.category_ids'));
 
-        $this->categories = $values[0];
+        $this->categories = [$values[0]];
         $this->propertyGroups = explode(',', $values[1]);
 
         $this->test = $propertyGroupRepositoryContract;

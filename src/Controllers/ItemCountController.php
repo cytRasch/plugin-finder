@@ -24,9 +24,9 @@ class ItemCountController
 
     /**
      * @param \Plenty\Plugin\Http\Request $request
-     * @return mixed
+     * @return array
      */
-    public function index( Request $request )
+    public function index( Request $request ) : array
     {
 
         $itemListOptions = [
@@ -39,13 +39,16 @@ class ItemCountController
             'priceMax'     => 0
         ];
 
-
-        return $this->getItemCount(
+        $items = $this->getItemCount(
             [
                 'itemList' => CategoryItems::getSearchFactory($itemListOptions),
                 'facets'   => Facets::getSearchFactory($itemListOptions)
             ],
             $itemListOptions
         );
+
+        return [
+            'items' => $items
+        ];
     }
 }

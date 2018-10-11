@@ -28,10 +28,9 @@ trait ItemListTrait
 
     /**
      * @param $defaultSearchFactories
-     * @param $options
      * @return mixed
      */
-    public function getItemCount( $defaultSearchFactories, $options )
+    public function getItemCount( $defaultSearchFactories )
     {
 
         /** @var ItemSearchService $itemSearchService */

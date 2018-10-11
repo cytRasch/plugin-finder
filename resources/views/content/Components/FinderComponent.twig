@@ -1,0 +1,44 @@
+<script type="x/template" id="vue-finder">
+    <div class="finder-component">
+
+        <form action="/search?facets=20" method="post">
+            <div class="box-select">
+
+                <select name="name01" id="n01" v-if="categories.length > 1">
+                    <option value="">Kategorien</option>
+                    <option value="10">Form</option>
+                </select>
+
+
+                <select name="name01" id="n01">
+                    <option value="">Form auswählen</option>
+                    <option value="10">Form</option>
+                    <option value="20">Form</option>
+                    <option value="30">Form</option>
+                </select>
+                <select name="name02" id="n02">
+                    <option value="">Größe auswählen</option>
+                    <option value="11">Größe</option>
+                    <option value="21">Größe</option>
+                    <option value="31">Größe</option>
+                </select>
+                <select name="name03" id="n03">
+                    <option value="">Farbe auswählen</option>
+                    <option value="12">Farbe</option>
+                    <option value="22">Farbe</option>
+                    <option value="32">Farbe</option>
+                </select>
+                <select name="name04" id="n04">
+                    <option value="">Muster auswählen</option>
+                    <option value="13">Muster</option>
+                    <option value="23">Muster</option>
+                    <option value="33">Muster</option>
+                </select>
+            </div>
+            <div class="box-button">
+                <button disabled><span id="countCarpets">0</span> {{ trans("teppichversand24::Template.home04") }}</button>
+            </div>
+        </form>
+
+    </div>
+</script>

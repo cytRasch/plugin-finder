@@ -10,7 +10,8 @@
     "authorIcon": "",
     "pluginIcon": "",
     "require": [
-        "IO"
+        "IO",
+        "Ceres"
     ],
     "price": 0.00,
     "namespace": "Finder",
@@ -19,12 +20,12 @@
     "dataProviders": [
         {
             "key": "Finder\\Containers\\FinderContainer",
-            "name": "FinderContainer",
-            "description": "Show Finder"
+            "name": "Finder Container",
+            "description": "Show Finder at this section"
         },
         {
             "key": "Finder\\Containers\\FinderJS",
-            "name": "FinderS",
+            "name": "Finder Javascript",
             "description": "Add required JavaScript for this plugin"
         }
     ]

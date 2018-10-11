@@ -30,8 +30,8 @@ class ItemCountController
     {
 
         $itemListOptions = [
-            'facets'     => $request->facets,
-            'categoryId' => $request->categoryId,
+            'facets'     => $request->get(facets),
+            'categoryId' => $request->get(categoryId),
         ];
 
         $this->initItemList(

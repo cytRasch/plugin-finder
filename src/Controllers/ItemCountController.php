@@ -30,8 +30,13 @@ class ItemCountController
     {
 
         $itemListOptions = [
-            'facets'     => $request->get('facets'),
-            'categoryId' => $request->get('categoryId'),
+            'page'         => 1,
+            'itemsPerPage' => 24,
+            'sorting'      => 'texts.name1_asc',
+            'facets'       => $request->get('facets'),
+            'categoryId'   => $request->get('categoryId'),
+            'priceMin'     => 0,
+            'priceMax'     => 0
         ];
 
         $this->initItemList(

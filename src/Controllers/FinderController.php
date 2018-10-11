@@ -86,8 +86,8 @@ class FinderController extends Controller
 
         foreach ( $this->categories as $category ) {
 
-            $c = $categoryService->get($category);
-            $i = $itemService->getItemForCategory($category, [], 1);
+            $c = $categoryService->get((int) $category);
+            $i = $itemService->getItemForCategory((int) $category, [], 1);
 
             $categories[] = [
                 'id'    => $category,

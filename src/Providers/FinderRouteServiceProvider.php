@@ -35,6 +35,8 @@ class FinderRouteServiceProvider extends RouteServiceProvider
         {
             $router->get('finder', 'Finder\Controllers\FinderController@index');
             $router->get('finder/{category}', 'Finder\Controllers\FinderController@show');
+
+            $router->get('finder/items', 'Finder\Controllers\ItemCountController');
         });
 
     }

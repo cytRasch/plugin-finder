@@ -2,7 +2,9 @@
 
 namespace Finder\Containers;
 
+
 use Plenty\Plugin\Templates\Twig;
+
 
 /**
  * Class OrderNowJS
@@ -18,6 +20,7 @@ class FinderJS
      */
     public function call( Twig $twig ) : string
     {
+
         return $twig->render('Finder:content.FinderJS');
     }
 }

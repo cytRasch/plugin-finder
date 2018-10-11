@@ -15,5 +15,17 @@
     "price": 0.00,
     "namespace": "Finder",
     "type": "template",
-    "serviceProvider": "Finder\\Providers\\FinderServiceProvider"
+    "serviceProvider": "Finder\\Providers\\FinderServiceProvider",
+    "dataProviders": [
+        {
+            "key": "Finder\\Containers\\FinderContainer",
+            "name": "FinderContainer",
+            "description": "Show Finder"
+        },
+        {
+            "key": "Finder\\Containers\\FinderJS",
+            "name": "FinderS",
+            "description": "Add required JavaScript for this plugin"
+        }
+    ]
 }

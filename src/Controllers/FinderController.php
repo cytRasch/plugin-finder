@@ -33,11 +33,6 @@ class FinderController extends Controller
     private $categories;
 
     /**
-     * @var array
-     */
-    private $propertyGroups;
-
-    /**
      * @var \Plenty\Modules\Property\Contracts\PropertyGroupRepositoryContract
      */
     public $test;
@@ -70,19 +65,9 @@ class FinderController extends Controller
         /** @var CategoryService $categoryService */
         $categoryService = pluginApp(CategoryService::class);
         $itemService = pluginApp(ItemService::class);
-        $propertiesRepo = pluginApp(PropertyGroupRepositoryContract::class);
-
-        $authHelper = pluginApp(AuthHelper::class);
 
         $categories = [];
-        $properties = null;
 
-        $properties = $authHelper->processUnguarded(
-            function () use ( $propertiesRepo, $properties )
-            {
-
-                return $propertiesRepo->getGroup(3);
-            });
 
         foreach ( $this->categories as $category ) {
 
@@ -93,7 +78,6 @@ class FinderController extends Controller
                 'id'    => $category,
                 'name'  => $c->details[0]->name,
                 'items' => $i->total,
-                'test'  => $properties
             ];
         }
 

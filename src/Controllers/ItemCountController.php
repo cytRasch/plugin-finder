@@ -43,8 +43,7 @@ class ItemCountController
             [
                 'itemList' => CategoryItems::getSearchFactory($itemListOptions),
                 'facets'   => Facets::getSearchFactory($itemListOptions)
-            ],
-            $itemListOptions
+            ]
         );
 
         return [

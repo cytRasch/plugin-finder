@@ -109,7 +109,7 @@ class FinderController extends Controller
     public function show( $category, $group )
     {
 
-        return $this->categories;
+        return 'shit';//$this->categories;
 
     }
 

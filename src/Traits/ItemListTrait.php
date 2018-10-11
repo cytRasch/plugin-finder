@@ -27,17 +27,19 @@ trait ItemListTrait
 
 
     /**
-     * @param       $defaultSearchFactories
-     * @param       $options
+     * @param $defaultSearchFactories
+     * @param $options
+     * @return mixed
      */
-    protected function initItemList( $defaultSearchFactories, $options ) : void
+    public function getItemCount( $defaultSearchFactories, $options )
     {
 
         /** @var ItemSearchService $itemSearchService */
         $itemSearchService = pluginApp(ItemSearchService::class);
 
         $searchResults = $itemSearchService->getResults($defaultSearchFactories);
-        $this->itemCountTotal = $searchResults['itemList']['total'];
+
+        return $searchResults['itemList']['total'];
     }
 
 }

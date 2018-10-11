@@ -39,14 +39,13 @@ class ItemCountController
             'priceMax'     => 0
         ];
 
-        $this->initItemList(
+
+        return $this->getItemCount(
             [
                 'itemList' => CategoryItems::getSearchFactory($itemListOptions),
                 'facets'   => Facets::getSearchFactory($itemListOptions)
             ],
             $itemListOptions
         );
-
-        return $this->itemCountTotal;
     }
 }

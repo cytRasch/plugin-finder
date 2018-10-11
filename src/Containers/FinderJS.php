@@ -20,7 +20,6 @@ class FinderJS
      */
     public function call( Twig $twig ) : string
     {
-
         return $twig->render('Finder::content.FinderJS');
     }
 }

@@ -17,10 +17,12 @@ class FinderContainer
 
     /**
      * @param \Plenty\Plugin\Templates\Twig $twig
+     * @return string
      */
     public function call( Twig $twig )
     {
 
+        return $twig->render('Finder::content.Finder');
     }
 
 }

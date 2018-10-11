@@ -26,7 +26,7 @@ class ItemCountController
      * @param \Plenty\Plugin\Http\Request $request
      * @return mixed
      */
-    public function __invoke( Request $request )
+    public function index( Request $request )
     {
 
         $itemListOptions = [

@@ -1868,7 +1868,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /**
  * Finder component
  */
-Vue.component("finder", {
+Vue.component("cyt-finder", {
+
+    name: 'cyt-finder',
 
     delimiters: ["${", "}"],
 
@@ -1967,7 +1969,7 @@ Vue.component("finder", {
                 console.log(response);
             }).catch(function (e) {
 
-                console.error("Could not fetch item count for finder: " + e + ".");
+                console.error('Could not fetch item count for finder: ' + e + '.');
             });
         }
     }

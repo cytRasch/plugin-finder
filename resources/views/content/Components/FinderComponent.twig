@@ -4,12 +4,15 @@
         <form action="/search?facets=20" method="post">
             <div class="box-select">
 
-                <select name="name01" id="n01">
-                    <option value="">Form auswählen</option>
-                    <option value="10">Form</option>
-                    <option value="20">Form</option>
-                    <option value="30">Form</option>
+                <select name="category" id="f01" v-if="categories.length">
+                    <option value="">{{ trans("Finder::Template.chooseCategory") }}</option>
+                    <option v-for="(category, index) in categories"
+                            :key="index"
+                            :value="category.id"
+                            @change="setCategory(category.id)">${ category.name }
+                    </option>
                 </select>
+
                 <select name="name02" id="n02">
                     <option value="">Größe auswählen</option>
                     <option value="11">Größe</option>

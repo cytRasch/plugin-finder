@@ -1899,7 +1899,7 @@ Vue.component("cyt-finder", {
             facets: [],
             categories: null,
             properties: null,
-            category: null
+            selectedCategory: null
 
         };
     },
@@ -1962,11 +1962,13 @@ Vue.component("cyt-finder", {
             // scope guard
             var self = this;
 
-            __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/rest/finder').then(function (response) {
+            __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/rest/finder').then(function (_ref) {
+                var data = _ref.data;
 
-                self.categories = response;
 
-                console.log(response);
+                self.categories = data;
+
+                //console.log(response);
             });
         },
 
@@ -1978,7 +1980,7 @@ Vue.component("cyt-finder", {
          */
         setCategory: function setCategory(id) {
 
-            this.category = id;
+            this.selectedCategory = id;
         },
 
 
@@ -1992,14 +1994,16 @@ Vue.component("cyt-finder", {
 
             __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get(url, {
                 params: {
-                    categoryId: this.category || '',
+                    categoryId: this.selectedCategory || '',
                     facets: this.facets.join(',')
                 }
-            }).then(function (response) {
+            }).then(function (_ref2) {
+                var data = _ref2.data;
 
-                self.items = response;
 
-                console.log(response);
+                self.items = data;
+
+                //console.log( data );
             }).catch(function (e) {
 
                 console.error('Could not fetch item count for finder: ' + e + '.');

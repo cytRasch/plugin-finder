@@ -12,16 +12,6 @@
                         "tooltip": "Config.finderCategoryIdsToolTip",
                         "defaultValue": ""
                     }
-                },
-                
-                "finder.button_text": {
-                    "type": "inputText",
-                    "required": true,
-                    "label": "Config.finderButtonText",
-                    "options": {
-                        "tooltip": "Config.finderButtonTextTooltip",
-                        "defaultValue": "Artkkel gefunden"
-                    }
                 }
             }
         }

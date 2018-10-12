@@ -33,7 +33,10 @@
                 </select>
             </div>
             <div class="box-button">
-                <button disabled><span id="countCarpets">0</span> {{ trans("Finder::Template.found") }}</button>
+                <button disabled>
+                    <span id="countCarpets" v-text="items"></span>
+                    {{ trans("Finder::Template.found") }}
+                </button>
             </div>
         </form>
 

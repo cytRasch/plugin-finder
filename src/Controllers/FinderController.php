@@ -76,7 +76,7 @@ class FinderController extends Controller
             $categories[] = [
                 'id'    => $category,
                 'name'  => $c->details[0]->name,
-                'slug' => $c,
+                'slug' => $c->details[0]->canonicalLink,
                 'items' => $i,
             ];
         }

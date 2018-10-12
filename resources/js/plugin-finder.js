@@ -1879,8 +1879,10 @@ Vue.component("cyt-finder", {
      */
     props: {
 
-        categories: null,
-        properties: null
+        template: {
+            type: String,
+            default: "#vue-cyt-finder"
+        }
 
     },
 
@@ -1895,9 +1897,23 @@ Vue.component("cyt-finder", {
 
             items: 0,
             facets: [],
+            categories: null,
+            properties: null,
             category: null
 
         };
+    },
+
+
+    /**
+     * created
+     */
+    created: function created() {
+        this.$options.template = this.template;
+    },
+    mounted: function mounted() {
+
+        this.getCategories();
     },
 
 
@@ -1935,6 +1951,23 @@ Vue.component("cyt-finder", {
         updateFacet: function updateFacet(index, id) {
 
             this.facets[index] = id;
+        },
+
+
+        /**
+         * Get config set categories
+         */
+        getCategories: function getCategories() {
+
+            // scope guard
+            var self = this;
+
+            __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/rest/finder').then(function (response) {
+
+                self.categories = response;
+
+                console.log(response);
+            });
         },
 
 

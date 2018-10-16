@@ -33,7 +33,7 @@
                 </select>
             </div>
             <div class="box-button">
-                <button disabled>
+                <button :disabled="items === 0">
                     <span id="countCarpets" v-text="items"></span>
                     {{ trans("Finder::Template.found") }}
                 </button>

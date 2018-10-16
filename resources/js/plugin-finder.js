@@ -1981,6 +1981,8 @@ Vue.component("cyt-finder", {
         setCategory: function setCategory(id) {
 
             this.selectedCategory = id;
+
+            this.getItemCount();
         },
 
 
@@ -1990,12 +1992,15 @@ Vue.component("cyt-finder", {
         getItemCount: function getItemCount() {
 
             var url = '/rest/finder/items',
-                self = this;
+
+
+            // scope guard
+            self = this;
 
             __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get(url, {
                 params: {
                     categoryId: this.selectedCategory || '',
-                    facets: this.facets.join(',')
+                    facets: this.facets.join(',') || ''
                 }
             }).then(function (_ref2) {
                 var data = _ref2.data;

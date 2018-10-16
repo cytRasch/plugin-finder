@@ -47,7 +47,7 @@ class ItemCountController
         );
 
         return [
-            'items' => $items
+            'count' => $items
         ];
     }
 }

@@ -40,7 +40,9 @@ class FinderServiceProvider extends ServiceProvider
 
         $dispatcher->listen('IO.Resource.Import', function ( ResourceContainer $resourceContainer )
         {
-            $resourceContainer->addScriptTemplate('OrderNow::content.FinderJS');
+
+            $resourceContainer->addScriptTemplate('Finder::content.FinderJS');
+            $resourceContainer->addStyleTemplate('Finder::content.FinderCSS');
 
         }, 0);
     }

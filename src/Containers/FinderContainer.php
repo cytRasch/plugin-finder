@@ -3,6 +3,7 @@
 namespace Finder\Containers;
 
 
+use Finder\Controllers\FinderController;
 use Plenty\Plugin\Templates\Twig;
 
 
@@ -21,7 +22,6 @@ class FinderContainer
      */
     public function call( Twig $twig )
     {
-
         return $twig->render('Finder::content.Finder');
     }
 

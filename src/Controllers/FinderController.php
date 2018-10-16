@@ -3,13 +3,15 @@
 namespace Finder\Controllers;
 
 
+use Finder\Traits\StringMatchTrait;
 use IO\Services\CategoryService;
-use IO\Services\ItemService;
+use IO\Services\SessionStorageService;
 use Plenty\Modules\Authorization\Services\AuthHelper;
-use Plenty\Modules\Property\Contracts\PropertyGroupRepositoryContract;
+use Plenty\Modules\Item\Property\Contracts\PropertyGroupNameRepositoryContract;
+use Plenty\Modules\Item\Property\Contracts\PropertyRepositoryContract;
+use Plenty\Plugin\CachingRepository;
 use Plenty\Plugin\ConfigRepository;
 use Plenty\Plugin\Controller;
-use Plenty\Plugin\Http\Request;
 
 
 /**
@@ -21,6 +23,7 @@ use Plenty\Plugin\Http\Request;
 class FinderController extends Controller
 {
 
+    use StringMatchTrait;
 
     /**
      * @var \Plenty\Plugin\ConfigRepository
@@ -28,73 +31,179 @@ class FinderController extends Controller
     protected $config;
 
     /**
-     * @var array
+     * @var \Plenty\Plugin\CachingRepository
      */
-    private $categories;
+    protected $cache;
 
     /**
-     * @var \Plenty\Modules\Property\Contracts\PropertyGroupRepositoryContract
+     * @var string
      */
-    public $test;
+    protected $lang = 'de';
+
+    /**
+     * @var array
+     */
+    private $arrayOfCategoriesAndProperties;
+
+
+    /**
+     * @var array
+     */
+    public $properties = [];
 
 
     /**
      * FinderController constructor.
      *
-     * @param \Plenty\Plugin\ConfigRepository $configRepository
+     * @param \Plenty\Plugin\ConfigRepository  $configRepository
+     * @param \Plenty\Plugin\CachingRepository $cachingRepository
      */
-    public function __construct( ConfigRepository $configRepository )
+    public function __construct( ConfigRepository $configRepository, CachingRepository $cachingRepository )
     {
 
         $this->config = $configRepository;
+        $this->cache = $cachingRepository;
 
-        $values = explode(';', $this->config->get('Finder.finder.category_ids'));
+        $this->cache->forget('finder-categories');
 
-        $this->categories = [(int) $values[0]];
+        /** @var SessionStorageService $sessionStorageService */
+        $sessionStorageService = pluginApp(SessionStorageService::class);
+        $this->lang = $sessionStorageService->getLang();
+
+        $this->arrayOfCategoriesAndProperties = $this->getCleanObjectFromString($this->config->get('Finder.finder.category_ids'));
 
     }
 
 
     /**
-     * @param \Plenty\Plugin\Http\Request $request
      * @return array
      */
-    public function index( Request $request ) : array
+    public function index() : array
     {
 
-        /** @var CategoryService $categoryService */
-        $categoryService = pluginApp(CategoryService::class);
-        $itemService = pluginApp(ItemService::class);
+        $categories = $this->arrayOfCategoriesAndProperties[0]['category'] === 0 ? [] : $this->getCategories();
 
-        $categories = [];
+        foreach ( $this->arrayOfCategoriesAndProperties as $array ) {
 
-        foreach ( $this->categories as $category ) {
+            foreach ( $array['properties'] as $property ) {
 
-            $c = $categoryService->get((int) $category);
-            $i = $itemService->getItemForCategory((int) $category, [], 1);
+                $this->properties[] = $this->getProperties($property, $array['category']);
 
-            $categories[] = [
-                'id'    => $category,
-                'name'  => $c->details[0]->name,
-                'slug' => $c->details[0]->canonicalLink,
-                'items' => $i,
-            ];
+            }
+
         }
+
+        return [
+            'lang'           => $this->lang,
+            'categories'     => $categories,
+            'propertyGroups' => $this->properties,
+            'selectFields'   => count($this->arrayOfCategoriesAndProperties[0]['properties']),
+            'showItemCount'  => (bool) $this->config->get('Finder.finder.show_items'),
+        ];
+    }
+
+
+    /**
+     * @param $propertyGroupId
+     * @return mixed
+     */
+    public function show( $propertyGroupId )
+    {
+
+        $properties = pluginApp(PropertyRepositoryContract::class);
+        $authHelper = pluginApp(AuthHelper::class);
+
+        return $authHelper->processUnguarded(
+            function () use ( $properties, $propertyGroupId )
+            {
+
+                return $properties->search(
+                    ['*'],
+                    100,
+                    1,
+                    ['names'],
+                    ['groupId' => $propertyGroupId]
+                );
+            }
+        );
+    }
+
+
+    /**
+     * @return mixed
+     *
+     */
+    public function getCategories()
+    {
+
+        $categories = null;
+
+        if ( $this->cache->has('finder-categories') ) {
+
+            $categories = $this->cache->get('finder-categories');
+
+        } else {
+
+            try {
+
+                $categoryService = pluginApp(CategoryService::class);
+                $categories = [];
+
+                foreach ( $this->arrayOfCategoriesAndProperties as $array ) {
+
+                    $category = $categoryService->get($array['category']);
+
+                    $categories[] = [
+                        'id'   => $array['category'],
+                        'name' => $category->details[0]->name,
+                        'slug' => $category->details[0]->canonicalLink,
+                    ];
+                }
+
+                $this->cache->put('finder-categories', $categories, $this->config->get('Finder.finder.caching_time'));
+
+            } catch ( \Exception $exception ) {
+
+                //
+            }
+        }
+
 
         return $categories;
     }
 
 
     /**
+     * @param $id
      * @param $category
-     * @param $group
      * @return mixed
      */
-    public function show( $category, $group )
+    public function getProperties( $id, $category )
     {
 
-        return 'shit';//$this->categories;
+        if ( $this->cache->has('finder-property-' . $id) ) {
 
+            return $this->cache->get('finder-property-' . $id);
+        }
+
+
+        $propertyGroups = pluginApp(PropertyGroupNameRepositoryContract::class);
+        $authHelper = pluginApp(AuthHelper::class);
+
+        return $authHelper->processUnguarded(
+            function () use ( $propertyGroups, $id, $category )
+            {
+
+                $response = $propertyGroups->findOne($id, $this->lang);
+                $response->categoryId = $category;
+
+                $this->cache->put('finder-property-' . $id, $response, $this->config->get('Finder.finder.caching_time'));
+
+                return $response;
+
+            }
+        );
     }
+
 
 }

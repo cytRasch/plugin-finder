@@ -12,6 +12,33 @@
                         "tooltip": "Config.finderCategoryIdsToolTip",
                         "defaultValue": ""
                     }
+                },
+                "finder.caching_time": {
+                    "type": "inputText",
+                    "required": false,
+                    "label": "Config.finderCachingTime",
+                    "options": {
+                        "tooltip": "Config.finderCachingTimeToolTip",
+                        "defaultValue": "300"
+                    }
+                },
+                "finder.button_text": {
+                    "type": "inputText",
+                    "required": false,
+                    "label": "Config.finderButton",
+                    "options": {
+                        "tooltip": "Config.finderButtonToolTip",
+                        "defaultValue": "Artikel gefunden"
+                    }
+                },
+                "finder.show_items": {
+                    "type": "checkBox",
+                    "required": false,
+                    "label": "Config.finderShowItemCount",
+                    "options": {
+                        "tooltip": "Config.finderShowItemCountToolTip",
+                        "defaultValue": true
+                    }
                 }
             }
         }

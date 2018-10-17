@@ -87,7 +87,9 @@ class FinderController extends Controller
 
             foreach ( $array['properties'] as $property ) {
 
-                $this->properties[] = $this->getProperties($property, $array['category']);
+                $props = $this->getProperties($property, $array['category']);
+                $props->categoryId =  $array['category'];
+                $this->properties[] = $props;
 
             }
 
@@ -195,7 +197,7 @@ class FinderController extends Controller
             {
 
                 $response = $propertyGroups->findOne($id, $this->lang);
-                $response->categoryId = $category;
+                //$response->categoryId = $category;
 
                 $this->cache->put('finder-property-' . $id, $response, $this->config->get('Finder.finder.caching_time'));
 

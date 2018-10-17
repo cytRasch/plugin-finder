@@ -5,9 +5,30 @@ yarn.lock
 .DS_Store
 mix-manifest.json
 dump.php
+test.php
 
 # directories
+node_modules
 node_modules/
+/node_modules
+/node_modules/
+
+tests
 tests/
+/tests
+/tests/
+
+.idea
 .idea/
+/.idea
+/.idea/
+
+resources/assets
 resources/assets/
+/resources/assets
+/resources/assets/
+
+.git
+.git/
+/.git
+/.git/

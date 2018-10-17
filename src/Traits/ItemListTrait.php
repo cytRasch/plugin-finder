@@ -41,4 +41,21 @@ trait ItemListTrait
         return $searchResults['itemList']['total'];
     }
 
+
+    /**
+     * @param $defaultSearchFactories
+     * @return mixed
+     */
+    public function getAllFacets( $defaultSearchFactories )
+    {
+
+        /** @var ItemSearchService $itemSearchService */
+        $itemSearchService = pluginApp(ItemSearchService::class);
+
+        $searchResults = $itemSearchService->getResults($defaultSearchFactories);
+
+        return $searchResults['facets'];
+
+    }
+
 }

@@ -3,6 +3,7 @@
 
 namespace Finder\Traits;
 
+
 /**
  * Trait StringMatchTrait
  *
@@ -10,6 +11,7 @@ namespace Finder\Traits;
  */
 trait StringMatchTrait
 {
+
 
     /**
      * @param $string
@@ -33,6 +35,22 @@ trait StringMatchTrait
         }
 
         return $response;
+    }
+
+
+    /**
+     * @param      $value
+     * @param bool $default
+     * @return bool
+     */
+    protected function getBooleanValue( $value, $default = false ) : bool
+    {
+
+        if ( $value === "true" || $value === "false" ) {
+            return $value === "true";
+        }
+
+        return $default;
     }
 
 

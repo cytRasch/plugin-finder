@@ -4,6 +4,15 @@
         "Config.SettingsTab": {
             "label": "Config.settingsTab",
             "formFields": {
+                "finder.logic_properties": {
+                    "type": "checkBox",
+                    "required": false,
+                    "label": "Config.finderLogicProperties",
+                    "options": {
+                        "tooltip": "Config.finderLogicPropertiesToolTip",
+                        "defaultValue": "false"
+                    }
+                },
                 "finder.category_ids": {
                     "type": "inputText",
                     "required": false,
@@ -31,13 +40,22 @@
                         "defaultValue": "Artikel gefunden"
                     }
                 },
+                "finder.button_text_en": {
+                    "type": "inputText",
+                    "required": false,
+                    "label": "Config.finderButtonEn",
+                    "options": {
+                        "tooltip": "Config.finderButtonEnToolTip",
+                        "defaultValue": "Items Found"
+                    }
+                },
                 "finder.show_items": {
                     "type": "checkBox",
                     "required": false,
                     "label": "Config.finderShowItemCount",
                     "options": {
                         "tooltip": "Config.finderShowItemCountToolTip",
-                        "defaultValue": true
+                        "defaultValue": "true"
                     }
                 }
             }

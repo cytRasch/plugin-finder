@@ -3,14 +3,11 @@
 namespace Finder\Controllers;
 
 
+use Finder\Repositories\FinderRepository;
+use Finder\Traits\ItemListTrait;
 use Finder\Traits\StringMatchTrait;
-use IO\Services\CategoryService;
-use IO\Services\SessionStorageService;
 use Plenty\Modules\Authorization\Services\AuthHelper;
-use Plenty\Modules\Item\Property\Contracts\PropertyGroupNameRepositoryContract;
 use Plenty\Modules\Item\Property\Contracts\PropertyRepositoryContract;
-use Plenty\Plugin\CachingRepository;
-use Plenty\Plugin\ConfigRepository;
 use Plenty\Plugin\Controller;
 
 
@@ -23,54 +20,49 @@ use Plenty\Plugin\Controller;
 class FinderController extends Controller
 {
 
-    use StringMatchTrait;
+    use StringMatchTrait, ItemListTrait;
 
     /**
-     * @var \Plenty\Plugin\ConfigRepository
+     * @var \Finder\Repositories\FinderRepository
      */
-    protected $config;
+    public $finder;
 
     /**
-     * @var \Plenty\Plugin\CachingRepository
+     * @var bool
      */
-    protected $cache;
-
-    /**
-     * @var string
-     */
-    protected $lang = 'de';
+    public $showItemCount;
 
     /**
      * @var array
      */
-    private $arrayOfCategoriesAndProperties;
-
+    public $categoriesAndProperties;
 
     /**
      * @var array
      */
     public $properties = [];
 
+    /**
+     * @var string
+     */
+    protected $useProperties;
+
 
     /**
      * FinderController constructor.
      *
-     * @param \Plenty\Plugin\ConfigRepository  $configRepository
-     * @param \Plenty\Plugin\CachingRepository $cachingRepository
+     * @param \Finder\Repositories\FinderRepository $finderRepository
      */
-    public function __construct( ConfigRepository $configRepository, CachingRepository $cachingRepository )
+    public function __construct( FinderRepository $finderRepository )
     {
 
-        $this->config = $configRepository;
-        $this->cache = $cachingRepository;
+        $this->finder = $finderRepository;
 
-        $this->cache->forget('finder-categories');
+        // get configuration values
+        $this->useProperties = $this->getBooleanValue($this->finder->config->get('Finder.finder.logic_properties'));
+        $this->showItemCount = $this->getBooleanValue($this->finder->config->get('Finder.finder.show_items'));
 
-        /** @var SessionStorageService $sessionStorageService */
-        $sessionStorageService = pluginApp(SessionStorageService::class);
-        $this->lang = $sessionStorageService->getLang();
-
-        $this->arrayOfCategoriesAndProperties = $this->getCleanObjectFromString($this->config->get('Finder.finder.category_ids'));
+        $this->categoriesAndProperties = $this->getCleanObjectFromString($this->finder->config->get('Finder.finder.category_ids'));
 
     }
 
@@ -81,26 +73,28 @@ class FinderController extends Controller
     public function index() : array
     {
 
-        $categories = $this->arrayOfCategoriesAndProperties[0]['category'] === 0 ? [] : $this->getCategories();
+        $content = $this->categoriesAndProperties;
+        $categories = $content[0]['category'] === 0 ? [] : $this->finder->getCategories($content);
 
-        foreach ( $this->arrayOfCategoriesAndProperties as $array ) {
+        foreach ( $content as $array ) {
 
-            foreach ( $array['properties'] as $property ) {
+            if ( $this->useProperties ) {
 
-                $props = $this->getProperties($property, $array['category']);
-                $props->categoryId =  $array['category'];
-                $this->properties[] = $props;
+                $this->properties = $this->finder->getProperties($array['properties'], $array['category']);
 
+            } else {
+
+                $this->properties = $this->finder->getFacets($array['category'], $array['properties']);
             }
-
         }
 
         return [
-            'lang'           => $this->lang,
+            'lang'           => $this->finder->lang,
             'categories'     => $categories,
             'propertyGroups' => $this->properties,
-            'selectFields'   => count($this->arrayOfCategoriesAndProperties[0]['properties']),
-            'showItemCount'  => (bool) $this->config->get('Finder.finder.show_items'),
+            'selectFields'   => count($content[0]['properties']),
+            'showItemCount'  => $this->showItemCount,
+            'useProperties'  => $this->useProperties,
         ];
     }
 
@@ -129,83 +123,5 @@ class FinderController extends Controller
             }
         );
     }
-
-
-    /**
-     * @return mixed
-     *
-     */
-    public function getCategories()
-    {
-
-        $categories = null;
-
-        if ( $this->cache->has('finder-categories') ) {
-
-            $categories = $this->cache->get('finder-categories');
-
-        } else {
-
-            try {
-
-                $categoryService = pluginApp(CategoryService::class);
-                $categories = [];
-
-                foreach ( $this->arrayOfCategoriesAndProperties as $array ) {
-
-                    $category = $categoryService->get($array['category']);
-
-                    $categories[] = [
-                        'id'   => $array['category'],
-                        'name' => $category->details[0]->name,
-                        'slug' => $category->details[0]->canonicalLink,
-                    ];
-                }
-
-                $this->cache->put('finder-categories', $categories, $this->config->get('Finder.finder.caching_time'));
-
-            } catch ( \Exception $exception ) {
-
-                //
-            }
-        }
-
-
-        return $categories;
-    }
-
-
-    /**
-     * @param $id
-     * @param $category
-     * @return mixed
-     */
-    public function getProperties( $id, $category )
-    {
-
-        if ( $this->cache->has('finder-property-' . $id) ) {
-
-            return $this->cache->get('finder-property-' . $id);
-        }
-
-
-        $propertyGroups = pluginApp(PropertyGroupNameRepositoryContract::class);
-        $authHelper = pluginApp(AuthHelper::class);
-
-        return $authHelper->processUnguarded(
-            function () use ( $propertyGroups, $id, $category )
-            {
-
-                $response = $propertyGroups->findOne($id, $this->lang);
-                //$response->categoryId = $category;
-
-                $this->cache->put('finder-property-' . $id, $response, $this->config->get('Finder.finder.caching_time'));
-
-                return $response;
-
-            }
-        );
-    }
-
 
 }

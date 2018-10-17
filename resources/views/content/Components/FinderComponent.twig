@@ -1,91 +1,69 @@
 <script type="x/template" id="vue-cyt-finder">
-
     <div class="finder-component">
+        <form :action="selectedCategory.slug.slice( 0, -1 ) || 'search'" method="get">
 
-        <form :action="finderUrl" method="get">
+            <input type="hidden"
+                   name="facets"
+                   :value="facets.filter( Boolean ).join( ',' )"/>
+            <input v-if="categories.length > 1"
+                   type="hidden"
+                   name="categoryId"
+                   :value="selectedCategory.id || ''"/>
 
             <div class="box-select">
 
-                <div class="finder-category" v-show="categories.length > 1">
+                <select class="finder"
+                        @change="setCategory($event)"
+                        v-show="categories.length > 1">
+                    <option value="0" disabled selected>{{ trans("Finder::Template.chooseCategory") }}</option>
+                    <option v-for="(category, index) in categories"
+                            :key="index"
+                            :rel="category.id"
+                            :value="category.slug">
+                        ${ category.name }
+                    </option>
+                </select>
 
-                    <select class="finder"
-                            @change="setCategory($event)">
+                <template v-for="n in selectFields"
+                          v-if="isLoading">
 
-                        <option value="0" disabled selected>{{ trans("Finder::Template.chooseCategory") }}</option>
-
-                        <option v-for="(category, index) in categories"
-                                :key="index"
-                                :rel="category.id"
-                                :value="category.slug">${ category.name }
-                        </option>
-
-                    </select>
-
-                </div>
-
-                <div class="finder-loading"
-                     v-for="(n, index) in selectFields"
-                     :key="'s' + index"
-                     v-if="isLoading">
-
-                    <select class="finder-select">
-
+                    <select class="finder-select loading">
                         <option value="">{{ trans("Finder::Template.loading") }}</option>
-
                     </select>
 
-                </div>
+                </template>
 
-                <div class="finder"
-                     :id="'finder' + index"
-                     v-for="(group, index) in propertyGroups"
-                     :key="index"
-                     v-if="!isLoading">
+                <template v-for="(group, index) in propertyGroups"
+                          v-if="!isLoading">
 
                     <select class="finder-select"
                             v-show="group.categoryId === selectedCategory.id"
                             @change="setFacet(index, $event)">
-
                         <option :value="group.id">${ group.name } {{ trans("Finder::Template.choose") }}</option>
-
                         <option v-for="(property, index) in group.properties"
                                 :key="'p' + index"
                                 :value="property.id"
                                 v-text="property.names[0].name"></option>
                     </select>
-                </div>
 
-                <div class="finder-preselect"
-                     v-for="(n, index) in selectFields"
-                     :key="'s' + index"
-                     v-if="!isLoading && (selectedCategory.id === 0 && categories.length)">
+                </template>
 
-                    <select class="finder-select">
+                <template v-for="n in selectFields"
+                          v-if="!isLoading && (selectedCategory.id === 0 && categories.length)">
 
+                    <select class="finder-select preselect">
                         <option value="0">{{ trans("Finder::Template.categoryFirst") }}</option>
-
                     </select>
 
-                </div>
-
-                <div class="box-button">
-
-                    <button :disabled="items === 0 || isLoading">
-
-                        <span id="countCarpets"
-                              v-text="items"
-                              v-if="showItemCount"></span>
-
-                        {{ config("Finder.finder.button_text") }}
-
-                    </button>
-
-                </div>
-
+                </template>
             </div>
 
+            <div class="box-button">
+                <button :disabled="items === 0 || isLoading">
+                <span id="countCarpets" v-text="items"
+                      v-if="showItemCount"></span> {{ config("Finder.finder.button_text") }}
+                </button>
+            </div>
         </form>
-
     </div>
-
 </script>

@@ -22,6 +22,17 @@ class ItemCountController
 
     use ItemListTrait;
 
+    /**
+     * @var array
+     */
+    public $itemListOptions = [
+        'page'         => 1,
+        'itemsPerPage' => 24,
+        'sorting'      => 'texts.name1_asc',
+        'priceMin'     => 0,
+        'priceMax'     => 0
+    ];
+
 
     /**
      * @param \Plenty\Plugin\Http\Request $request
@@ -30,43 +41,29 @@ class ItemCountController
     public function index( Request $request ) : array
     {
 
+        $this->itemListOptions['facets'] = $request->get('facets');
+
         if ( $request->has('categoryId') ) {
-            $itemListOptions = [
-                'page'         => 1,
-                'itemsPerPage' => 24,
-                'sorting'      => 'texts.name1_asc',
-                'facets'       => $request->get('facets'),
-                'categoryId'   => $request->get('categoryId'),
-                'priceMin'     => 0,
-                'priceMax'     => 0
+
+            $this->itemListOptions['categoryId'] = $request->get('categoryId');
+
+            $searchFactory = [
+                'itemList' => CategoryItems::getSearchFactory($this->itemListOptions),
+                'facets'   => Facets::getSearchFactory($this->itemListOptions),
             ];
 
-            $items = $this->getItemCount(
-                [
-                    'itemList' => CategoryItems::getSearchFactory($itemListOptions),
-                    'facets'   => Facets::getSearchFactory($itemListOptions)
-                ]
-            );
         } else {
 
-            $itemListOptions = [
-                'page'         => 1,
-                'itemsPerPage' => 24,
-                'sorting'      => 'texts.name1_asc',
-                'facets'       => $request->get('facets'),
-                'query'        => '',
-                'priceMin'     => 0,
-                'priceMax'     => 0
+            $this->itemListOptions['query'] = '';
+
+            $searchFactory = [
+                'itemList' => SearchItems::getSearchFactory($this->itemListOptions),
+                'facets'   => Facets::getSearchFactory($this->itemListOptions),
             ];
 
-            $items = $this->getItemCount(
-                [
-                    'itemList' => SearchItems::getSearchFactory($itemListOptions),
-                    'facets'   => Facets::getSearchFactory($itemListOptions)
-                ]
-            );
-
         }
+
+        $items = $this->getItemCount($searchFactory);
 
         return [
             'count' => $items

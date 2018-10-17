@@ -1,6 +1,6 @@
 <script type="x/template" id="vue-cyt-finder">
-    <div class="finder-component">
-        <form :action="selectedCategory.slug.slice( 0, -1 ) || 'search'" method="get">
+    <div class="finder-component" :class="{ 'items-loading': itemsLoading }">
+        <form :action="selectedCategory.slug.slice( 0, -1 ) || '/search'" method="get">
 
             <input type="hidden"
                    name="facets"

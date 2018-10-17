@@ -27,6 +27,11 @@
             "key": "Finder\\Containers\\FinderJS",
             "name": "Finder Javascript",
             "description": "Add required JavaScript for this plugin"
+        },
+        {
+            "key": "Finder\\Containers\\FinderCSS",
+            "name": "Finder Stylesheet",
+            "description": "Add custom Inline-CSS for this plugin"
         }
     ]
 }

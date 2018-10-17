@@ -4,9 +4,13 @@
 
 Einzufügender Code:
 
-```{% include 'Finder::content.Finder.twig' %}```
+```{% include 'Finder::content.Finder' %}```
 
-Fertig.
+Container-Verknüpfungen:
+
+Container **Finder Javascript (Finder)**, ```Script loader: After scripts loaded``` (Haken setzen).
+Optional kann unter **Finder Stylsheet (Finder)** per Haken unter ```Template: Style``` auch eigenes CSS für das Plugin
+hinzugefügt werden.
 
 ## Konfiguration
 

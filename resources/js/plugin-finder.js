@@ -1965,7 +1965,7 @@ Vue.component("cyt-finder", {
 
             this.facets[index] = event.target.value;
 
-            if (id === "") this.facets.splice(index, 1);
+            if (id === "") this.facets[index] = undefined;
 
             if (this.showItemCount) this.getItemCount();
         },

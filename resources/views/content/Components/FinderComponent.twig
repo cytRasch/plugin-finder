@@ -39,7 +39,7 @@
                     <select class="finder-select"
                             v-show="group.categoryId === selectedCategory.id"
                             @change="setFacet(index, $event)">
-                        <option value="0">${ group.name } {{ trans("Finder::Template.choose") }}</option>
+                        <option value="">${ group.name } {{ trans("Finder::Template.choose") }}</option>
                         <option v-for="(property, index) in group.properties"
                                 :key="'p' + index"
                                 :value="property.id"

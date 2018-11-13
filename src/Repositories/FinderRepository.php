@@ -85,31 +85,32 @@ class FinderRepository implements FinderRepositoryInterface
 
             $categories = $this->cache->get('finder-categories');
 
-        } else {
+        } //else {
 
-            try {
+        try {
 
-                $categoryService = pluginApp(CategoryService::class);
-                $categories = [];
+            $categoryService = pluginApp(CategoryService::class);
+            $categories = [];
 
-                foreach ( $categoriesAndProperties as $array ) {
+            foreach ( $categoriesAndProperties as $array ) {
 
-                    $category = $categoryService->get($array['category']);
+                $category = $categoryService->get($array['category']);
 
-                    $categories[] = [
-                        'id'   => $array['category'],
-                        'name' => $category->details[0]->name,
-                        'slug' => $category->details[0]->canonicalLink,
-                    ];
-                }
-
-                $this->cache->put('finder-categories', $categories, $this->config->get('Finder.finder.caching_time'));
-
-            } catch ( \Exception $exception ) {
-
-                // die($exception);
+                $categories[] = [
+                    'id'   => $array['category'],
+                    'name' => $category->details[0]->name,
+                    'slug' => $category->details[0]->canonicalLink,
+                    'dev' => $category
+                ];
             }
+
+            $this->cache->put('finder-categories', $categories, $this->config->get('Finder.finder.caching_time'));
+
+        } catch ( \Exception $exception ) {
+
+            // die($exception);
         }
+        //}
 
         return $categories;
     }

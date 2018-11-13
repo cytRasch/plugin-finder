@@ -99,7 +99,7 @@ class FinderRepository implements FinderRepositoryInterface
                 $categories[] = [
                     'id'   => $array['category'],
                     'name' => $category->details[0]->name,
-                    'slug' => $category->details[0]->canonicalLink,
+                    'slug' => $category->details[0]->nameUrl,
                     'dev' => $category
                 ];
             }

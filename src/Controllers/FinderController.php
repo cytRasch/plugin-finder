@@ -86,16 +86,16 @@ class FinderController extends Controller
 
             if ( $this->useProperties ) {
 
-                $this->properties = $this->finder->getProperties($array['properties'], $array['category']);
+                $this->properties[] = $this->finder->getProperties($array['properties'], $array['category']);
 
             } else {
 
-                $this->properties = $this->finder->getFacets($array['category'], $array['properties'], $this->alphabetically);
+                $this->properties[] = $this->finder->getFacets($array['category'], $array['properties'], $this->alphabetically);
             }
         }
 
         return [
-            'test'           => $content,
+            //'test'           => $content,
             'lang'           => $this->finder->lang,
             'categories'     => $categories,
             'propertyGroups' => $this->properties,

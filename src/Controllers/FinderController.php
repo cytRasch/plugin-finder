@@ -5,7 +5,6 @@ namespace Finder\Controllers;
 
 use Finder\Repositories\FinderRepository;
 use Finder\Traits\ItemListTrait;
-use Finder\Traits\FlattenArrayTrait;
 use Finder\Traits\StringMatchTrait;
 use Plenty\Modules\Authorization\Services\AuthHelper;
 use Plenty\Modules\Item\Property\Contracts\PropertyRepositoryContract;
@@ -21,7 +20,7 @@ use Plenty\Plugin\Controller;
 class FinderController extends Controller
 {
 
-    use StringMatchTrait, ItemListTrait, FlattenArrayTrait;
+    use StringMatchTrait, ItemListTrait;
 
     /**
      * @var \Finder\Repositories\FinderRepository

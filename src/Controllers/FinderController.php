@@ -47,6 +47,11 @@ class FinderController extends Controller
      */
     protected $useProperties;
 
+    /*
+     * @var bool
+     */
+    protected $alphabetically;
+
 
     /**
      * FinderController constructor.
@@ -61,6 +66,7 @@ class FinderController extends Controller
         // get configuration values
         $this->useProperties = $this->getBooleanValue($this->finder->config->get('Finder.finder.logic_properties'));
         $this->showItemCount = $this->getBooleanValue($this->finder->config->get('Finder.finder.show_items'));
+        $this->alphabetically = $this->getBooleanValue($this->finder->config->get('Finder.finder.order_alphabetically'));
 
         $this->categoriesAndProperties = $this->getCleanObjectFromString($this->finder->config->get('Finder.finder.category_ids'));
 
@@ -84,17 +90,19 @@ class FinderController extends Controller
 
             } else {
 
-                $this->properties = $this->finder->getFacets($array['category'], $array['properties']);
+                $this->properties = $this->finder->getFacets($array['category'], $array['properties'], $this->alphabetically);
             }
         }
 
         return [
+            'test'           => $content,
             'lang'           => $this->finder->lang,
             'categories'     => $categories,
             'propertyGroups' => $this->properties,
             'selectFields'   => count($content[0]['properties']),
             'showItemCount'  => $this->showItemCount,
             'useProperties'  => $this->useProperties,
+            'alphabetically' => $this->alphabetically,
         ];
     }
 

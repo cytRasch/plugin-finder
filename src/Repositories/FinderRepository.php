@@ -85,32 +85,31 @@ class FinderRepository implements FinderRepositoryInterface
 
             $categories = $this->cache->get('finder-categories');
 
-        } //else {
+        } else {
 
-        try {
+            try {
 
-            $categoryService = pluginApp(CategoryService::class);
-            $categories = [];
+                $categoryService = pluginApp(CategoryService::class);
+                $categories = [];
 
-            foreach ( $categoriesAndProperties as $array ) {
+                foreach ( $categoriesAndProperties as $array ) {
 
-                $category = $categoryService->get($array['category']);
+                    $category = $categoryService->get($array['category']);
 
-                $categories[] = [
-                    'id'   => $array['category'],
-                    'name' => $category->details[0]->name,
-                    'slug' => $category->details[0]->nameUrl,
-                    'dev' => $category
-                ];
+                    $categories[] = [
+                        'id'   => $array['category'],
+                        'name' => $category->details[0]->name,
+                        'slug' => $category->details[0]->nameUrl,
+                    ];
+                }
+
+                $this->cache->put('finder-categories', $categories, $this->config->get('Finder.finder.caching_time'));
+
+            } catch ( \Exception $exception ) {
+
+                // die($exception);
             }
-
-            $this->cache->put('finder-categories', $categories, $this->config->get('Finder.finder.caching_time'));
-
-        } catch ( \Exception $exception ) {
-
-            // die($exception);
         }
-        //}
 
         return $categories;
     }
@@ -119,9 +118,10 @@ class FinderRepository implements FinderRepositoryInterface
     /**
      * @param null  $categoryId
      * @param array $filter
+     * @param bool  $alphabetically
      * @return array
      */
-    public function getFacets( $categoryId = null, array $filter = [] ) : array
+    public function getFacets( $categoryId = null, array $filter = [] , $alphabetically = false) : array
     {
 
         // empty array
@@ -173,6 +173,18 @@ class FinderRepository implements FinderRepositoryInterface
 
             }
 
+            // order items alphabetically
+            if($alphabetically) {
+
+                $lang = $this->lang === 'de' ? 0 : 1;
+
+                usort($properties[$key]['properties'], function ( $a, $b ) use ($lang)
+                {
+
+                    return strcmp($a['names'][$lang]['name'], $b['names'][$lang]['name']);
+                });
+            }
+
         }
 
         return $properties;
@@ -180,11 +192,12 @@ class FinderRepository implements FinderRepositoryInterface
 
 
     /**
-     * @param array $propertyGroupIds
-     * @param int   $categoryId
+     * @param array                    $propertyGroupIds
+     * @param \Finder\Repositories\int $categoryId
+     * @param bool                     $alphabetically
      * @return array|mixed
      */
-    public function getProperties( array $propertyGroupIds, int $categoryId )
+    public function getProperties( array $propertyGroupIds, int $categoryId, $alphabetically = false )
     {
 
         $content = [];

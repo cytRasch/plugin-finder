@@ -81,11 +81,7 @@ class FinderRepository implements FinderRepositoryInterface
 
         $categories = null;
 
-        if ( $this->cache->has('finder-categories') ) {
 
-            $categories = $this->cache->get('finder-categories');
-
-        } else {
 
             try {
 
@@ -103,13 +99,13 @@ class FinderRepository implements FinderRepositoryInterface
                     ];
                 }
 
-                $this->cache->put('finder-categories', $categories, $this->config->get('Finder.finder.caching_time'));
+                //$this->cache->put('finder-categories', $categories, $this->config->get('Finder.finder.caching_time'));
 
             } catch ( \Exception $exception ) {
 
                 // die($exception);
             }
-        }
+
 
         return $categories;
     }

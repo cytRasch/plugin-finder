@@ -5,6 +5,7 @@ namespace Finder\Controllers;
 
 use Finder\Repositories\FinderRepository;
 use Finder\Traits\ItemListTrait;
+use Finder\Traits\FlattenArrayTrait;
 use Finder\Traits\StringMatchTrait;
 use Plenty\Modules\Authorization\Services\AuthHelper;
 use Plenty\Modules\Item\Property\Contracts\PropertyRepositoryContract;
@@ -20,7 +21,7 @@ use Plenty\Plugin\Controller;
 class FinderController extends Controller
 {
 
-    use StringMatchTrait, ItemListTrait;
+    use StringMatchTrait, ItemListTrait, FlattenArrayTrait;
 
     /**
      * @var \Finder\Repositories\FinderRepository
@@ -95,10 +96,9 @@ class FinderController extends Controller
         }
 
         return [
-            //'test'           => $content,
             'lang'           => $this->finder->lang,
             'categories'     => $categories,
-            'propertyGroups' => $this->properties,
+            'propertyGroups' => $this->flatten($this->properties),
             'selectFields'   => count($content[0]['properties']),
             'showItemCount'  => $this->showItemCount,
             'useProperties'  => $this->useProperties,

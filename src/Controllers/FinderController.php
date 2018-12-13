@@ -82,7 +82,7 @@ class FinderController extends Controller
         $content = $this->categoriesAndProperties;
         $categories = $content[0]['category'] === 0 ? [] : $this->finder->getCategories($content);
 
-        foreach ( $categories as $array ) {
+        foreach ( $content as $array ) {
 
             if ( $this->useProperties ) {
 

@@ -80,6 +80,7 @@ class FinderController extends Controller
     public function index() : array
     {
 
+        $props = [];
         $content = $this->categoriesAndProperties;
         $categories = $content[0]['category'] === 0 ? [] : $this->finder->getCategories($content);
 
@@ -95,10 +96,19 @@ class FinderController extends Controller
             }
         }
 
+        foreach ( $this->properties as $property ) {
+
+            foreach ( $property as $value ) {
+
+                $props[] = $value;
+            }
+
+        }
+
         return [
             'lang'           => $this->finder->lang,
             'categories'     => $categories,
-            'propertyGroups' => $this->flatten($this->properties),
+            'propertyGroups' => $props,
             'selectFields'   => count($content[0]['properties']),
             'showItemCount'  => $this->showItemCount,
             'useProperties'  => $this->useProperties,
